@@ -10,14 +10,20 @@ import (
 	"syscall"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
 	exit := make(chan os.Signal,1)
 	signal.Notify(exit, syscall.SIGTERM, os.Interrupt)
 	gs := grpc.NewServer()
+	
 	playlist := domain.New("playlist.txt")
+	
 	protos.RegisterPlaylistServer(gs,playlist)
+
+	reflection.Register(gs)
+
 	l,err := net.Listen("tcp",":9092")
 	if err != nil{
 		panic(err)
