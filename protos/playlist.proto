@@ -1,0 +1,29 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "./";
+
+service Playlist {
+    rpc AddSong(Song) returns (google.protobuf.Empty);
+    rpc Play(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc Pause(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc Next(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc Prev(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc Delete(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc NowPlaying(google.protobuf.Empty) returns (Track);
+}
+
+
+message Song{
+    string Title = 1;
+    string Author = 2;
+    google.protobuf.Duration Duration = 3;
+}
+
+message Track{
+    string Title = 1;
+    string Author = 2;
+    google.protobuf.Duration Duration = 3;
+    google.protobuf.Duration Playtime = 4;
+}
