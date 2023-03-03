@@ -151,14 +151,14 @@ func (p *Track) Next(ctx context.Context, void *emptypb.Empty) (*emptypb.Empty, 
 	if p == nil{
 		return void, status.Error(codes.NotFound,"Playlist is empty")
 	}
-	if Current.next != nil {
-		Current = *Current.next
+	if p.next != nil {
+		p = p.next
 		PausedOn = 0
 	} else {
 		return void, status.Errorf(codes.NotFound, "This is the last track")
 	}
 	mu.Unlock()
-	Current.Play(ctx, void)
+	p.Play(ctx, void)
 	return void, status.Errorf(codes.OK, "Next track")
 }
 
@@ -174,7 +174,7 @@ func (p *Track) Prev(ctx context.Context, void *emptypb.Empty) (*emptypb.Empty, 
 		return void, status.Errorf(codes.NotFound, "This is the first track")
 	}
 	mu.Unlock()
-	_, err := Current.Play(ctx, void)
+	_, err := p.Play(ctx, void)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Unable to play due to %v", err)
 	}
